@@ -1,7 +1,6 @@
+var ASSETS_PATH  = require('./paths').ASSETS_PATH;
 
-const { ASSETS_PATH } = require('./paths');
-
-const cssLoader = {
+var cssLoader = {
   loader: 'css-loader',
   options: {
     modules: true,
@@ -11,7 +10,7 @@ const cssLoader = {
   }
 };
 
-const sassLoader = {
+var sassLoader = {
   loader: 'sass-loader',
   options: {
     outputStyle: 'expanded',

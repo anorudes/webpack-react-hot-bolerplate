@@ -1,31 +1,24 @@
-const webpack        = require('webpack');
-const webpackMerge   = require('webpack-merge');
-const cssnano        = require('cssnano');
-const path           = require('path');
+var webpack = require('webpack');
+var webpackMerge = require('webpack-merge');
+var cssnano = require('cssnano');
+var path = require('path');
+var loaders = require('./config/loaders');
+var PATHS = require('./config/paths');
+var DEVELOPMENT_CONFIG = require('./config/webpack.dev');
+var PRODUCTION_CONFIG  = require('./config/webpack.prod');
+var ENV = process.env.NODE_ENV;
+var VALID_ENVIRONMENTS = ['test', 'development', 'production'];
 
-const DEVELOPMENT_CONFIG = require('./config/webpack.dev');
-const PRODUCTION_CONFIG  = require('./config/webpack.prod');
-const {
-  APP_PATH,
-  DIST_PATH,
-  NODE_MODULES_PATH
-} = require('./config/paths');
-const { cssLoader, sassLoader } = require('./config/loaders');
-
-const ENV = process.env.NODE_ENV;
-const VALID_ENVIRONMENTS = ['test', 'development', 'production'];
-
-if (!VALID_ENVIRONMENTS.includes(ENV)) {
+if (VALID_ENVIRONMENTS.indexOf(ENV) === -1) {
   throw new Error(`${ ENV } is not valid environment!`);
 }
 
-const config = {
+var config = {
   development: DEVELOPMENT_CONFIG,
   production:  PRODUCTION_CONFIG
 }[ENV];
 
-
-const COMMON_CONFIG = {
+var COMMON_CONFIG = {
   entry: {
     vendor: [
       'react',
@@ -40,7 +33,7 @@ const COMMON_CONFIG = {
   },
 
   output: {
-    path: DIST_PATH,
+    path: PATHS.DIST_PATH,
     filename: '[name].js'
   },
 
@@ -48,7 +41,7 @@ const COMMON_CONFIG = {
     rules: [
       {
         test: /\.js$/,
-        include: APP_PATH,
+        include: PATHS.APP_PATH,
         use: [
           'babel-loader',
           'eslint-loader'
@@ -56,8 +49,8 @@ const COMMON_CONFIG = {
       },
       {
         test: /\.sass$/,
-        include: APP_PATH,
-        use: ['style-loader', cssLoader, 'postcss-loader', sassLoader]
+        include: PATHS.APP_PATH,
+        use: ['style-loader', loaders.cssLoader, 'postcss-loader', loaders.sassLoader]
       }
     ]
   },
@@ -65,13 +58,13 @@ const COMMON_CONFIG = {
   resolve: {
     extensions: ['.js', '.sass'],
     modules: [
-      NODE_MODULES_PATH,
-      APP_PATH
+      PATHS.NODE_MODULES_PATH,
+      PATHS.APP_PATH
     ],
     alias: {
-      components: path.resolve(APP_PATH, 'components'),
-      config:     path.resolve(APP_PATH, 'config'),
-      reducers:   path.resolve(APP_PATH, 'reducers')
+      components: path.resolve(PATHS.APP_PATH, 'components'),
+      config:     path.resolve(PATHS.APP_PATH, 'config'),
+      reducers:   path.resolve(PATHS.APP_PATH, 'reducers')
     }
   },
 
@@ -124,4 +117,3 @@ const COMMON_CONFIG = {
 };
 
 module.exports = webpackMerge.smart(COMMON_CONFIG, config);
-

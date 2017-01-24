@@ -1,18 +1,13 @@
-const webpack = require('webpack');
-const htmlWebpackPlugin = require('html-webpack-plugin');
-const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
+var webpack = require('webpack');
+var htmlWebpackPlugin = require('html-webpack-plugin');
+var WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
+var PATHS = require('./paths');
 
-
-const {
-  HOT_ONLY_ENTRY,
-  NODE_MODULES_PATH
-} = require('./paths');
-
-const DEVELOPMENT_CONFIG = {
+var DEVELOPMENT_CONFIG = {
   entry: {
     client: [
       'react-hot-loader/patch',
-      HOT_ONLY_ENTRY
+      PATHS.HOT_ONLY_ENTRY
     ]
   },
 
@@ -43,7 +38,7 @@ const DEVELOPMENT_CONFIG = {
       title: 'react webpack-2 react-hot-loader-v3 react-router-v4 boilerplate',
       template: './config/index.ejs'
     }),
-    new WatchMissingNodeModulesPlugin(NODE_MODULES_PATH)
+    new WatchMissingNodeModulesPlugin(PATHS.NODE_MODULES_PATH)
   ]
 };
 

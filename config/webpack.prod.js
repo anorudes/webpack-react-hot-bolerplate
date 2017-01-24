@@ -1,34 +1,31 @@
-const webpack             = require('webpack');
-const ManifestPlugin      = require('webpack-manifest-plugin');
-const ExtractTextPlugin   = require('extract-text-webpack-plugin');
-
-// https://github.com/webpack/webpack/issues/1315
-const WebpackMd5Hash = require('webpack-md5-hash');
-
-const { DIST_PATH, APP_PATH }   = require('./paths');
-const { cssLoader, sassLoader } = require('./loaders');
+var webpack = require('webpack');
+var ManifestPlugin = require('webpack-manifest-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var WebpackMd5Hash = require('webpack-md5-hash');
+var PATHS = require('./paths');
+var loaders = require('./loaders');
 
 const PRODUCTION_CONFIG = {
   entry: {
     client: [
-      APP_PATH
+      PATHS.APP_PATH
     ]
   },
 
   output: {
-    path:           DIST_PATH,
-    filename:       '[name]-[chunkhash].bundle.js',
-    chunkFilename:  '[id]-[chunkhash].bundle.js'
+    path: PATHS.DIST_PATH,
+    filename: '[name]-[chunkhash].bundle.js',
+    chunkFilename: '[id]-[chunkhash].bundle.js'
   },
 
   module: {
     rules: [
       {
         test: /\.sass$/,
-        include: APP_PATH,
+        include: PATHS.APP_PATH,
         loader: ExtractTextPlugin.extract({
           fallbackLoader: 'style-loader',
-          loader: [cssLoader, 'postcss-loader', sassLoader]
+          loader: [loaders.cssLoader, 'postcss-loader', loaders.sassLoader]
         })
       }
     ]
